@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="laporan_gabungan_perangkat_csv" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1784a252-912c-41d8-8ca6-3014fb868547">
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT 
+                pe.nomor_seri,
+                pe.jenis_perangkat, 
+                pe.merek_perangkat,
+                pe.nama_perangkat,
+                pe.model_perangkat,
+                dp.id_detail,
+                dp.warna,
+                dp.harga,
+                dp.stok
+            FROM perangkat_elektronik pe
+            LEFT JOIN detail_perangkat dp ON pe.nomor_seri = dp.nomor_seri
+            ORDER BY pe.nomor_seri, dp.id_detail]]>
+	</queryString>
+	<field name="nomor_seri" class="java.lang.String"/>
+	<field name="jenis_perangkat" class="java.lang.String"/>
+	<field name="merek_perangkat" class="java.lang.String"/>
+	<field name="nama_perangkat" class="java.lang.String"/>
+	<field name="model_perangkat" class="java.lang.String"/>
+	<field name="id_detail" class="java.lang.Integer"/>
+	<field name="warna" class="java.lang.String"/>
+	<field name="harga" class="java.lang.Long"/>
+	<field name="stok" class="java.lang.Integer"/>
+	<title>
+		<band height="30">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20" uuid="35f0e8e5-a309-4625-a75c-e15fd9c66b8b"/>
+				<text><![CDATA[nomor_seri,jenis_perangkat,merek_perangkat,nama_perangkat,model_perangkat,id_detail,warna,harga,stok]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20" uuid="74bb8aaa-3934-461f-8bc7-4420f12582b2"/>
+				<textFieldExpression><![CDATA[$F{nomor_seri} + "," + 
+                    $F{jenis_perangkat} + "," + 
+                    $F{merek_perangkat} + "," + 
+                    $F{nama_perangkat} + "," + 
+                    $F{model_perangkat} + "," + 
+                    ($F{id_detail} != null ? $F{id_detail}.toString() : "") + "," + 
+                    ($F{warna} != null ? $F{warna} : "") + "," + 
+                    ($F{harga} != null ? $F{harga}.toString() : "0") + "," + 
+                    ($F{stok} != null ? $F{stok}.toString() : "0")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

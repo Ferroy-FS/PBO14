@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" 
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports 
+              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
+              name="laporan_gabungan_perangkat" 
+              pageWidth="595" 
+              pageHeight="842" 
+              columnWidth="555" 
+              leftMargin="20" 
+              rightMargin="20" 
+              topMargin="20" 
+              bottomMargin="20">
+    
+    <parameter name="REPORT_TITLE" class="java.lang.String"/>
+    
+    <queryString>
+        <![CDATA[SELECT 
+                pe.nomor_seri,
+                pe.jenis_perangkat, 
+                pe.merek_perangkat,
+                pe.nama_perangkat,
+                pe.model_perangkat,
+                dp.id_detail,
+                dp.warna,
+                dp.harga,
+                dp.stok
+            FROM perangkat_elektronik pe
+            INNER JOIN detail_perangkat dp ON pe.nomor_seri = dp.nomor_seri
+            ORDER BY pe.nomor_seri, dp.id_detail]]>
+    </queryString>
+    
+    <field name="nomor_seri" class="java.lang.String"/>
+    <field name="jenis_perangkat" class="java.lang.String"/>
+    <field name="merek_perangkat" class="java.lang.String"/>
+    <field name="nama_perangkat" class="java.lang.String"/>
+    <field name="model_perangkat" class="java.lang.String"/>
+    <field name="id_detail" class="java.lang.Integer"/>
+    <field name="warna" class="java.lang.String"/>
+    <field name="harga" class="java.lang.Long"/>
+    <field name="stok" class="java.lang.Integer"/>
+    
+    <!-- Group by nomor_seri untuk mengelompokkan data master -->
+    <group name="PerangkatGroup">
+        <groupExpression><![CDATA[$F{nomor_seri}]]></groupExpression>
+        <groupHeader>
+            <band height="80">
+                <staticText>
+                    <reportElement x="0" y="0" width="555" height="20"/>
+                    <textElement>
+                        <font size="14" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Data Master Perangkat]]></text>
+                </staticText>
+                
+                <!-- Data Master -->
+                <staticText>
+                    <reportElement x="0" y="25" width="80" height="15"/>
+                    <textElement>
+                        <font isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Nomor Seri:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="80" y="25" width="100" height="15"/>
+                    <textFieldExpression><![CDATA[$F{nomor_seri}]]></textFieldExpression>
+                </textField>
+                
+                <staticText>
+                    <reportElement x="190" y="25" width="50" height="15"/>
+                    <textElement>
+                        <font isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Jenis:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="240" y="25" width="100" height="15"/>
+                    <textFieldExpression><![CDATA[$F{jenis_perangkat}]]></textFieldExpression>
+                </textField>
+                
+                <staticText>
+                    <reportElement x="350" y="25" width="50" height="15"/>
+                    <textElement>
+                        <font isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Merek:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="400" y="25" width="155" height="15"/>
+                    <textFieldExpression><![CDATA[$F{merek_perangkat}]]></textFieldExpression>
+                </textField>
+                
+                <staticText>
+                    <reportElement x="0" y="40" width="50" height="15"/>
+                    <textElement>
+                        <font isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Nama:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="50" y="40" width="200" height="15"/>
+                    <textFieldExpression><![CDATA[$F{nama_perangkat}]]></textFieldExpression>
+                </textField>
+                
+                <staticText>
+                    <reportElement x="260" y="40" width="50" height="15"/>
+                    <textElement>
+                        <font isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Model:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="310" y="40" width="245" height="15"/>
+                    <textFieldExpression><![CDATA[$F{model_perangkat}]]></textFieldExpression>
+                </textField>
+                
+                <!-- Header untuk detail -->
+                <staticText>
+                    <reportElement x="0" y="55" width="555" height="20"/>
+                    <textElement textAlignment="Center">
+                        <font isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Detail Varian/Warna]]></text>
+                </staticText>
+            </band>
+        </groupHeader>
+    </group>
+    
+    <title>
+        <band height="79">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="30"/>
+                <textElement textAlignment="Center">
+                    <font size="16" isBold="true"/>
+                </textElement>
+                <text><![CDATA[LAPORAN PERANGKAT ELEKTRONIK]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="30" width="555" height="20"/>
+                <textElement textAlignment="Center">
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[Data Master dan Detail Perangkat]]></text>
+            </staticText>
+            <line>
+                <reportElement x="0" y="55" width="555" height="1"/>
+            </line>
+        </band>
+    </title>
+    
+    <detail>
+        <band height="25">
+            <!-- Data Detail (warna, harga, stok) -->
+            <textField>
+                <reportElement x="0" y="0" width="80" height="20"/>
+                <textElement>
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA["ID: " + $F{id_detail}]]></textFieldExpression>
+            </textField>
+            
+            <textField>
+                <reportElement x="80" y="0" width="100" height="20"/>
+                <textElement>
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Warna: " + $F{warna}]]></textFieldExpression>
+            </textField>
+            
+            <textField>
+                <reportElement x="180" y="0" width="150" height="20"/>
+                <textElement textAlignment="Right">
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Harga: Rp " + java.text.NumberFormat.getNumberInstance(new java.util.Locale("id", "ID")).format($F{harga})]]></textFieldExpression>
+            </textField>
+            
+            <textField>
+                <reportElement x="330" y="0" width="80" height="20"/>
+                <textElement textAlignment="Center">
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Stok: " + $F{stok}]]></textFieldExpression>
+            </textField>
+            
+            <textField>
+                <reportElement x="410" y="0" width="145" height="20"/>
+                <textElement textAlignment="Center">
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA[($F{stok} > 0) ? "Status: Tersedia" : "Status: Habis"]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    
+    <pageFooter>
+        <band height="30">
+            <line>
+                <reportElement x="0" y="0" width="555" height="1"/>
+            </line>
+            <textField>
+                <reportElement x="0" y="10" width="300" height="15"/>
+                <textElement>
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Generated on: " + new java.util.Date()]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement x="400" y="10" width="155" height="15"/>
+                <textElement textAlignment="Right">
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_COUNT}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+</jasperReport>
